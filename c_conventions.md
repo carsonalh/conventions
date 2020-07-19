@@ -34,10 +34,11 @@ An important note on naming conventions specified by this standard:
 
 Some of the definitions that will be referenced throughout this standard are:
 
-* `module_abbreviation`: A 2-to-4 letter abbrevation of the name of the
-library, which should **always** be in all lower-case. This can be longer, but
-it is convention to make this short, as it is the one thing about your codebase
-you should expect the reader to memorise.
+* `module_abbreviation`: A 2-to-4 letter (approximately) abbrevation of the
+name of the library, which would typically be in lower case; it is more
+important that the casing used throughout the code is consistent than anything
+else. This can be longer, but it is convention to make this short, as it is the
+one thing about your codebase you should expect the reader to memorise.
 
 ### Global Variable Naming Conventions
 
@@ -76,6 +77,18 @@ enum fl_FileState {
 
 Ideally, a struct's name would be more descriptive than this, but you get the
 point.
+
+The name of members in a struct should all have the same rules for local
+variables, as defined by this standard. An example is shown below.
+
+```c
+struct fl_FileData {
+    const char *name;
+    size_t size;
+    uint32_t flag_descriptor;
+    struct fl_Chunk chunks[];
+};
+```
 
 ### Function Naming Conventions
 
@@ -137,4 +150,126 @@ when you do so, you **know** that you're using a struct, instead of being
 really sure. This can stop the user of the library from making dumb mistakes
 that would be preventable from not typedef'ing structs needlessly. This is not
 to say that typedefs are bad, but in general, I would avoid them if you can.
+
+### Header Guards
+
+Make sure that every header file you ever write has a header guard; **PRAGMA
+ONCE WILL NOT BE ACCEPTED**. The name of the header guard define should be the
+name of the header file followed by a `_H` suffix.  For example, say the name
+of our header file was `input_manager.h`. The name of the define in the header
+guard should be `INPUT_MANAGER_H`.
+
+### Switch Statements
+
+Don't use them.
+
+### VLAs (Variable Length Arrays)
+
+Don't use them.
+
+### Brace Formatting
+
+For control flow, all of the braces in the application should follow the "java"
+convention. This specifies that the opening brace to the control statement body
+is on the same line as the control statement itself. Examples of this is
+provided below.
+
+```c
+/* For loops: */
+for (int i = 0; i < COUNT; i++) {
+    /* Body */
+}
+
+/* While loops: */
+while (condition) {
+    /* Body */
+}
+
+/* If statements: */
+if (condition) {
+    /* Body */
+}
+```
+
+Do not put anything on the same line after a closing brace. For example;
+
+```c
+/* This syntax */
+
+if (condition) {
+    /* Body */
+}
+else if (another_condition) {
+    /* Body */
+}
+else {
+    /* Body */
+}
+
+/* is better than this */
+
+if (condition) {
+    /* Body */
+} else if (another_condition) {
+    /* Body */
+} else {
+    /* Body */
+}
+
+
+/* This syntax */
+
+do {
+    /* Body */
+}
+while (condition);
+
+/* is better than this */
+
+do {
+    /* Body */
+} while (condition);
+```
+
+For function bodys, however, there is an exception for the brace placement.
+Braces in function bodys should start on the line after the function signature.
+
+```c
+/* This syntax */
+
+int main(void)
+{
+    /* Body */
+}
+
+/* is better than this */
+
+int main(void) {
+    /* Body */
+}
+```
+
+### Indentation
+
+Use 4 spaces per indent. This is always the case except for when splitting one
+line into many other lines. In such a case, use 8 spaces for an indent (which
+is the same as two normal indents, as per this standard).
+
+```c
+for (int i = 0; i < COUNT; i++) {
+    if (fl_SatisfiesConstraint(i)) {
+        /* Body */
+    }
+}
+
+fl_SetupMetadata(
+        &info,
+        NUMBER_OF_CHUNKS,
+        NULL
+);
+```
+
+### Comments
+
+Use only `/* */` style comments, and not `//` style comments.
 
